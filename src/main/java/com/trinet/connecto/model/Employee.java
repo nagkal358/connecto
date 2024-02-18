@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.sql.Date;
 
@@ -16,11 +17,12 @@ import java.sql.Date;
 @Document
 public class Employee {
     @Id
-    public String id;
+    @Field("id")
+    public Integer id;
     public String name;
     public String email;
     public String password;
     public Integer role;
-    public Date singupOn;
+    public Date signupOn;
     public Date lastLogin;
 }
