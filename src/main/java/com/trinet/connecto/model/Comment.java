@@ -18,7 +18,7 @@ import java.sql.Date;
 public class Comment {
     @Id
     @Field("id")
-    public Integer id;
+    public Long id;
     public String comment;
     public Date commentedDate;
     public Integer threadId;

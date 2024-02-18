@@ -26,7 +26,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.getEmployeeById(employeeId);
     }
     public Employee checkEmployee(Employee employee){
-        return employeeRepository.checkEmployee(employee);
+        Employee emp = employeeRepository.checkEmployee(employee);
+        return employeeRepository.checkEmployee(emp);
     }
     @SneakyThrows
     public Employee addNewEmployee(Employee employee){
