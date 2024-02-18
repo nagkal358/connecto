@@ -23,18 +23,18 @@ public class EmployeeController {
 
     @GetMapping(value = "/get-employees")
     public ResponseEntity<List<Employee>> getAllEmployees(){
-        return new ResponseEntity<List<Employee>>(employeeService.getAllEmployees(), HttpStatus.OK);
+        return new ResponseEntity<>(employeeService.getAllEmployees(), HttpStatus.OK);
     }
     @GetMapping(value = "/get-employee/{employeeId}")
     public ResponseEntity<Employee> getEmployeeById(@PathVariable Integer employeeId){
-        return new ResponseEntity<Employee>(employeeService.getEmployeeById(employeeId), HttpStatus.OK);
+        return new ResponseEntity<>(employeeService.getEmployeeById(employeeId), HttpStatus.OK);
     }
     @GetMapping(value = "/login")
     public ResponseEntity<Employee> checkEmployee(@RequestBody Employee employee){
-        return new ResponseEntity<Employee>(employeeService.checkEmployee(employee), HttpStatus.OK);
+        return new ResponseEntity<>(employeeService.checkEmployee(employee), HttpStatus.OK);
     }
     @PostMapping(value = "/signup")
     public ResponseEntity<Employee> addNewEmployee(Employee employee){
-        return new ResponseEntity<Employee>(employeeService.addNewEmployee(employee), HttpStatus.OK);
+        return new ResponseEntity<>(employeeService.addNewEmployee(employee), HttpStatus.OK);
     }
 }

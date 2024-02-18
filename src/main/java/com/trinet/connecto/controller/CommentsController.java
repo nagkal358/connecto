@@ -23,16 +23,16 @@ public class CommentsController {
     CommentService commentService;
     @GetMapping(value = "/get-comments/{threadId}")
     public ResponseEntity<List<Comment>> getAllCommentsForThread(@PathVariable(required = true) Integer threadId){
-        return new ResponseEntity<List<Comment>>(commentService.getAllCommentsForThread(threadId), HttpStatus.OK);
+        return new ResponseEntity<>(commentService.getAllCommentsForThread(threadId), HttpStatus.OK);
     }
 
     @GetMapping(value = "/get-comment/{commentId}")
     public ResponseEntity<Comment> getCommentById(@PathVariable(required = true) Integer commentId){
-        return new ResponseEntity<Comment>(commentService.getCommentById(commentId), HttpStatus.OK);
+        return new ResponseEntity<>(commentService.getCommentById(commentId), HttpStatus.OK);
     }
 
     @PostMapping(value = "/add-comment")
     public ResponseEntity<Comment> addNewComment(@RequestBody Comment comment){
-        return new ResponseEntity<Comment>(commentService.addNewComment(comment), HttpStatus.OK);
+        return new ResponseEntity<>(commentService.addNewComment(comment), HttpStatus.OK);
     }
 }
