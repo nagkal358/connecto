@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ThreadRepository {
 
-    List<Thread> getAllThreads();
+    List<Thread> getAllThreads(Integer pageNo, Integer pageLimit);
     List<Category> getAllCategories();
 
     Thread getThreadById(Integer threadId);

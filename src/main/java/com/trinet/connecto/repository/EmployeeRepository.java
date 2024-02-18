@@ -8,7 +8,7 @@ public interface EmployeeRepository {
     List<Employee> getAllEmployees();
 
     Employee getEmployeeById(Integer employeeId);
-    Employee getEmployeeByEmail(String email);
+    Employee checkEmployee(Employee employee);
 
     Employee addNewEmployee(Employee employee);
 }

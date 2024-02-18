@@ -15,7 +15,7 @@ public class ThreadRepositoryImpl implements ThreadRepository {
     @Autowired
     private MongoTemplate mongoTemplate;
     @Override
-    public List<Thread> getAllThreads() {
+    public List<Thread> getAllThreads(Integer pageNo, Integer pageLimit) {
         return mongoTemplate.findAll(Thread.class);
     }
     @Override
