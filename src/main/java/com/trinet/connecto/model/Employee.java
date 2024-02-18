@@ -18,7 +18,7 @@ import java.sql.Date;
 public class Employee {
     @Id
     @Field("id")
-    public Integer id;
+    public Long id;
     public String name;
     public String email;
     public String password;

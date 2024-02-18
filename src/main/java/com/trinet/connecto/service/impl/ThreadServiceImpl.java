@@ -2,8 +2,10 @@ package com.trinet.connecto.service.impl;
 
 import com.trinet.connecto.model.Category;
 import com.trinet.connecto.model.Thread;
+import com.trinet.connecto.repository.SequenceRepository;
 import com.trinet.connecto.repository.ThreadRepository;
 import com.trinet.connecto.service.ThreadService;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,8 @@ import java.util.List;
 public class ThreadServiceImpl implements ThreadService {
     @Autowired
     ThreadRepository threadRepository;
+    @Autowired
+    SequenceRepository sequenceRepository;
     public List<Thread> getAllThreads(Integer pageNo, Integer pageLimit){
         return threadRepository.getAllThreads(pageNo, pageLimit);
     }
@@ -25,7 +29,9 @@ public class ThreadServiceImpl implements ThreadService {
         return threadRepository.getThreadById(threadId);
     }
 
+    @SneakyThrows
     public Thread addNewThread(Thread thread){
+        thread.setId(sequenceRepository.getNextSequenceId("thread"));
         return threadRepository.addNewThread(thread);
     }
 }

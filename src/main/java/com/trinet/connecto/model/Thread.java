@@ -18,12 +18,11 @@ import java.sql.Date;
 public class Thread {
     @Id
     @Field("id")
-    public Integer id;
+    public Long id;
     public String title;
     public String description;
     public Category category;
     public Date createdOn;
     public Integer status;
     public Integer employeeId;
-
 }
