@@ -7,9 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
+@Repository
 public class ThreadRepositoryImpl implements ThreadRepository {
 
     @Autowired
@@ -24,7 +25,7 @@ public class ThreadRepositoryImpl implements ThreadRepository {
     }
 
     @Override
-    public Thread getThreadById(Integer threadId) {
+    public Thread getThreadById(Long threadId) {
         Query query = new Query();
         query.addCriteria(Criteria.where("id").is(threadId));
         return mongoTemplate.findOne(query, Thread.class);

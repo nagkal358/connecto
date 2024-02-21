@@ -10,7 +10,7 @@ public interface ThreadRepository {
     List<Thread> getAllThreads(Integer pageNo, Integer pageLimit);
     List<Category> getAllCategories();
 
-    Thread getThreadById(Integer threadId);
+    Thread getThreadById(Long threadId);
 
     Thread addNewThread(Thread thread);
 }

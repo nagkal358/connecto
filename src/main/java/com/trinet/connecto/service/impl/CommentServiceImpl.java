@@ -17,11 +17,11 @@ public class CommentServiceImpl implements CommentService {
     CommentRepository commentRepository;
     @Autowired
     SequenceRepository sequenceRepository;
-    public List<Comment> getAllCommentsForThread(Integer threadId){
+    public List<Comment> getAllCommentsForThread(Long threadId){
         return commentRepository.getAllCommentsForThread(threadId);
     }
 
-    public Comment getCommentById(Integer commentId){
+    public Comment getCommentById(Long commentId){
         return commentRepository.getCommentById(commentId);
     }
 

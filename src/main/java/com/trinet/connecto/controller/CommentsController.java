@@ -17,17 +17,17 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping(path = "${application-version}"+"${comment-api.path}")
+@RequestMapping(path = "${application.version}"+"${comment-api.path}")
 public class CommentsController {
     @Autowired
     CommentService commentService;
     @GetMapping(value = "/get-comments/{threadId}")
-    public ResponseEntity<List<Comment>> getAllCommentsForThread(@PathVariable(required = true) Integer threadId){
+    public ResponseEntity<List<Comment>> getAllCommentsForThread(@PathVariable(required = true) Long threadId){
         return new ResponseEntity<>(commentService.getAllCommentsForThread(threadId), HttpStatus.OK);
     }
 
     @GetMapping(value = "/get-comment/{commentId}")
-    public ResponseEntity<Comment> getCommentById(@PathVariable(required = true) Integer commentId){
+    public ResponseEntity<Comment> getCommentById(@PathVariable(required = true) Long commentId){
         return new ResponseEntity<>(commentService.getCommentById(commentId), HttpStatus.OK);
     }
 

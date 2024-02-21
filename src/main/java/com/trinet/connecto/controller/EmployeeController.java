@@ -13,10 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
-@RequestMapping(path = "${application-version}"+"${employee-api.path}")
+@RequestMapping(path = "${application.version}"+"${employee-api.path}")
 public class EmployeeController {
     @Autowired
     EmployeeService employeeService;
@@ -31,7 +32,8 @@ public class EmployeeController {
     }
     @GetMapping(value = "/login")
     public ResponseEntity<Employee> checkEmployee(@RequestBody Employee employee){
-        return new ResponseEntity<>(employeeService.checkEmployee(employee), HttpStatus.OK);
+        Optional<Employee> empl = Optional.ofNullable(employeeService.checkEmployee(employee));
+        return empl.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> ResponseEntity.status(HttpStatus.FORBIDDEN).build());
     }
     @PostMapping(value = "/signup")
     public ResponseEntity<Employee> addNewEmployee(Employee employee){

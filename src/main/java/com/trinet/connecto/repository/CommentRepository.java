@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface CommentRepository {
 
-    List<Comment> getAllCommentsForThread(Integer threadId);
+    List<Comment> getAllCommentsForThread(Long threadId);
 
-    Comment getCommentById(Integer commentId);
+    Comment getCommentById(Long commentId);
 
     Comment addNewComment(Comment comment);
 }
