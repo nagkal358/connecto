@@ -6,9 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.sql.Date;
+import java.time.Instant;
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,12 +17,11 @@ import java.sql.Date;
 @Document
 public class Thread {
     @Id
-    @Field("id")
     public Long id;
     public String title;
     public String description;
     public Category category;
-    public Date createdOn;
-    public Integer status;
+    public Date createdOn = Date.from(Instant.now());
+    public Integer status = 0;
     public Integer employeeId;
 }

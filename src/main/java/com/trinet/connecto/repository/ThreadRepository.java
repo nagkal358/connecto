@@ -11,6 +11,8 @@ public interface ThreadRepository {
     List<Category> getAllCategories();
 
     Thread getThreadById(Long threadId);
-
+    Long getOpenThreadsCount();
     Thread addNewThread(Thread thread);
+    Thread editThread(Thread thread);
+    Category addNewCategory(Category category);
 }

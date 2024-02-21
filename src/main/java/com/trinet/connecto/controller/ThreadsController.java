@@ -19,17 +19,17 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping(path = "${application.version}"+"${thread-api.path}")
+@RequestMapping(path = "thread")
 public class ThreadsController {
     @Autowired
     ThreadService threadService;
+    @GetMapping(value = "/get-open-thread-count")
+    public ResponseEntity<Long> getOpenThreadsCount(){
+        return new ResponseEntity<>(threadService.getOpenThreadCount(), HttpStatus.OK);
+    }
     @GetMapping(value = "/get-threads/{pageNo}/{pageLimit}")
     public ResponseEntity<List<ThreadData>> getAllThreads(@PathVariable(required = false) Integer pageNo, @PathVariable(required = false) Integer pageLimit){
         return new ResponseEntity<>(threadService.getAllThreads(pageNo, pageLimit), HttpStatus.OK);
-    }
-    @GetMapping(value = "/get-categories")
-    public ResponseEntity<List<Category>> getAllCategories(){
-        return new ResponseEntity<>(threadService.getAllCategories(), HttpStatus.OK);
     }
     @GetMapping(value = "/get-thread/{threadId}")
     public ResponseEntity<ThreadData> getThread(@PathVariable(required = false) Long threadId){
@@ -38,5 +38,18 @@ public class ThreadsController {
     @PostMapping(value = "/add-thread")
     public ResponseEntity<Thread> addNewThread(@RequestBody Thread thread){
         return new ResponseEntity<>(threadService.addNewThread(thread), HttpStatus.OK);
+    }
+    @PostMapping(value = "/edit-thread/{threadId}")
+    public ResponseEntity<Thread> editThread(@PathVariable Long threadId, @RequestBody Thread thread){
+        thread.setId(threadId);
+        return new ResponseEntity<>(threadService.editThread(thread), HttpStatus.OK);
+    }
+    @GetMapping(value = "/get-categories")
+    public ResponseEntity<List<Category>> getAllCategories(){
+        return new ResponseEntity<>(threadService.getAllCategories(), HttpStatus.OK);
+    }
+    @PostMapping(value = "/add-category")
+    public ResponseEntity<Category> addNewCategory(@RequestBody Category category){
+        return new ResponseEntity<>(threadService.addNewCategory(category), HttpStatus.OK);
     }
 }

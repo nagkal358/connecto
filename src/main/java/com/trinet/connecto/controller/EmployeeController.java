@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @Slf4j
 @RestController
-@RequestMapping(path = "${application.version}"+"${employee-api.path}")
+@RequestMapping(path = "employee")
 public class EmployeeController {
     @Autowired
     EmployeeService employeeService;
@@ -30,13 +30,13 @@ public class EmployeeController {
     public ResponseEntity<Employee> getEmployeeById(@PathVariable Integer employeeId){
         return new ResponseEntity<>(employeeService.getEmployeeById(employeeId), HttpStatus.OK);
     }
-    @GetMapping(value = "/login")
+    @PostMapping(value = "/login")
     public ResponseEntity<Employee> checkEmployee(@RequestBody Employee employee){
         Optional<Employee> empl = Optional.ofNullable(employeeService.checkEmployee(employee));
         return empl.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> ResponseEntity.status(HttpStatus.FORBIDDEN).build());
     }
     @PostMapping(value = "/signup")
-    public ResponseEntity<Employee> addNewEmployee(Employee employee){
+    public ResponseEntity<Employee> addNewEmployee(@RequestBody Employee employee){
         return new ResponseEntity<>(employeeService.addNewEmployee(employee), HttpStatus.OK);
     }
 }

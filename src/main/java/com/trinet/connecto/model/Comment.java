@@ -6,9 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.sql.Date;
+import java.time.Instant;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -17,11 +17,10 @@ import java.sql.Date;
 @Document
 public class Comment {
     @Id
-    @Field("id")
     public Long id;
     public String comment;
-    public Date commentedDate;
+    public Date commentedDate = Date.from(Instant.now());
     public Integer threadId;
     public Integer employeeId;
-    public Integer status;
+    public Integer status = 1;
 }

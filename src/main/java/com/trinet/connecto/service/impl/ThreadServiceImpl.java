@@ -24,9 +24,15 @@ public class ThreadServiceImpl implements ThreadService {
     SequenceRepository sequenceRepository;
     @Autowired
     CommentRepository commentRepository;
+    @Autowired
     ModelMapper modelMapper;
+
+    public Long getOpenThreadCount(){
+        return threadRepository.getOpenThreadsCount();
+    }
+
     public List<ThreadData> getAllThreads(Integer pageNo, Integer pageLimit){
-        List<ThreadData> threadsData = new ArrayList<ThreadData>();
+        List<ThreadData> threadsData = new ArrayList<>();
         List<Thread> threads = threadRepository.getAllThreads(pageNo, pageLimit);
         threads.forEach((thread) -> {
             ThreadData threadData = modelMapper.map(thread, ThreadData.class);
@@ -50,5 +56,15 @@ public class ThreadServiceImpl implements ThreadService {
     public Thread addNewThread(Thread thread){
         thread.setId(sequenceRepository.getNextSequenceId("thread"));
         return threadRepository.addNewThread(thread);
+    }
+    @SneakyThrows
+    public Thread editThread(Thread thread){
+        return threadRepository.editThread(thread);
+    }
+
+    @SneakyThrows
+    public Category addNewCategory(Category category){
+        category.setId(sequenceRepository.getNextSequenceId("category"));
+        return threadRepository.addNewCategory(category);
     }
 }

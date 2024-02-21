@@ -8,8 +8,11 @@ import java.util.List;
 
 public interface ThreadService {
 
+    Long getOpenThreadCount();
     List<ThreadData> getAllThreads(Integer pageNo, Integer pageLimit);
-    List<Category> getAllCategories();
     ThreadData getThreadById(Long threadId);
     Thread addNewThread(Thread thread);
+    Thread editThread(Thread thread);
+    Category addNewCategory(Category category);
+    List<Category> getAllCategories();
 }
