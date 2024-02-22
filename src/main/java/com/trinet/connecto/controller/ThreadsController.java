@@ -25,12 +25,16 @@ public class ThreadsController {
         return new ResponseEntity<>(threadService.getOpenThreadCount(), HttpStatus.OK);
     }
     @GetMapping(value = "/get-thread-counts-by-status")
-    public ResponseEntity<List<StatusCounts>> getThreadsCountBySattus(){
-        return new ResponseEntity<>(threadService.getThreadCountsBysattus(), HttpStatus.OK);
+    public ResponseEntity<List<StatusCounts>> getThreadsCountByStatus(){
+        return new ResponseEntity<>(threadService.getThreadCountsByStatus(), HttpStatus.OK);
     }
     @GetMapping(value = "/get-threads/{status}/{pageNo}/{pageLimit}")
     public ResponseEntity<List<ThreadData>> getAllThreads(@PathVariable(required = false) Integer status, @PathVariable(required = false) Integer pageNo, @PathVariable(required = false) Integer pageLimit){
         return new ResponseEntity<>(threadService.getAllThreads(status, pageNo, pageLimit), HttpStatus.OK);
+    }
+    @GetMapping(value = "/get-threads-for-user/{employeeId}/{status}/{pageNo}/{pageLimit}")
+    public ResponseEntity<List<ThreadData>> getAllThreadsForEmployee(@PathVariable Integer employeeId,@PathVariable(required = false) Integer status, @PathVariable(required = false) Integer pageNo, @PathVariable(required = false) Integer pageLimit){
+        return new ResponseEntity<>(threadService.getAllThreadsForEmployee(employeeId, status, pageNo, pageLimit), HttpStatus.OK);
     }
     @GetMapping(value = "/get-thread/{threadId}")
     public ResponseEntity<ThreadData> getThread(@PathVariable(required = false) Long threadId){

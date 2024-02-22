@@ -36,11 +36,23 @@ public class ThreadServiceImpl implements ThreadService {
         return threadRepository.getOpenThreadsCount();
     }
 
-    public List<StatusCounts> getThreadCountsBysattus(){
+    public List<StatusCounts> getThreadCountsByStatus(){
         List<StatusCounts> countsByStatus = threadRepository.getThreadsCountsByStatus();
         Map<Integer, String> threadStatus = threadStatusMapper.getMapping();
         countsByStatus.forEach(cs -> cs.setStatusText(threadStatus.get(cs.getStatus())));
         return countsByStatus;
+    }
+
+    @Override
+    public List<ThreadData> getAllThreadsForEmployee(Integer employeeId, Integer status, Integer pageNo, Integer pageLimit) {
+        List<ThreadData> threadsData = new ArrayList<>();
+        List<Thread> threads = threadRepository.getAllThreadsForEmployee(employeeId, status, pageNo, pageLimit);
+        threads.forEach((thread) -> {
+            ThreadData threadData = modelMapper.map(thread, ThreadData.class);
+            threadData.setComments(commentRepository.getAllCommentsForThread(thread.id));
+            threadsData.add(threadData);
+        });
+        return threadsData;
     }
 
     public List<ThreadData> getAllThreads(Integer status, Integer pageNo, Integer pageLimit){

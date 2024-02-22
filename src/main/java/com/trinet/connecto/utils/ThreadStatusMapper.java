@@ -13,6 +13,7 @@ public class ThreadStatusMapper {
         statusMapper.put(1, "submitted");
         statusMapper.put(2, "approved");
         statusMapper.put(3, "completed");
+        statusMapper.put(4, "rejected");
         return statusMapper;
     }
 }

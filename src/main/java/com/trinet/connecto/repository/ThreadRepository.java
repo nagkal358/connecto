@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface ThreadRepository {
 
+    List<Thread> getAllThreadsForEmployee(Integer employeeId, Integer status, Integer pageNo, Integer pageLimit);
     List<Thread> getAllThreads(Integer status, Integer pageNo, Integer pageLimit);
     List<Category> getAllCategories();
 

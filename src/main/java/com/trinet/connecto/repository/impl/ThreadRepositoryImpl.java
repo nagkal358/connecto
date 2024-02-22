@@ -24,6 +24,19 @@ public class ThreadRepositoryImpl implements ThreadRepository {
 
     @Autowired
     private MongoTemplate mongoTemplate;
+
+    @Override
+    public List<Thread> getAllThreadsForEmployee(Integer employeeId, Integer status, Integer pageNo, Integer pageLimit) {
+        Query query = new Query();
+        Criteria criteria = Criteria.where("employeeId").is(employeeId);
+        query.skip((long) pageNo * pageLimit);
+        query.limit(pageLimit);
+        if(status > 0)
+            criteria.and("status").is(status);
+        query.addCriteria(criteria);
+        return mongoTemplate.find(query, Thread.class);
+    }
+
     @Override
     public List<Thread> getAllThreads(Integer status, Integer pageNo, Integer pageLimit) {
         Query query = new Query();

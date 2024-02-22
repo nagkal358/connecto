@@ -10,7 +10,8 @@ import java.util.List;
 public interface ThreadService {
 
     Long getOpenThreadCount();
-    List<StatusCounts> getThreadCountsBysattus();
+    List<StatusCounts> getThreadCountsByStatus();
+    List<ThreadData> getAllThreadsForEmployee(Integer employeeId,Integer status, Integer pageNo, Integer pageLimit);
     List<ThreadData> getAllThreads(Integer status, Integer pageNo, Integer pageLimit);
     ThreadData getThreadById(Long threadId);
     Thread addNewThread(Thread thread);
