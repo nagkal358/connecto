@@ -22,6 +22,6 @@ public class Thread {
     public String description;
     public Category category;
     public Date createdOn = Date.from(Instant.now());
-    public Integer status = 0;
+    public Integer status = 1;
     public Integer employeeId;
 }

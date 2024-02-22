@@ -21,6 +21,13 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     }
 
     @Override
+    public Employee getEmployeeByEmail(String email) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("email").is(email));
+        return mongoTemplate.findOne(query, Employee.class);
+    }
+
+    @Override
     public Employee getEmployeeById(Integer employeeId) {
         Query query = new Query();
         query.addCriteria(Criteria.where("id").is(employeeId));

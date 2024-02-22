@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 @Slf4j
 public class EmployeeServiceImpl implements EmployeeService {
@@ -30,7 +32,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
     @SneakyThrows
     public Employee addNewEmployee(Employee employee){
-        employee.setId(sequenceRepository.getNextSequenceId("employee"));
-        return employeeRepository.addNewEmployee(employee);
+        Optional<Employee> employee1 = Optional.ofNullable(employeeRepository.getEmployeeByEmail(employee.getEmail()));
+        if(employee1.isPresent()){
+            return null;
+        } else {
+            employee.setId(sequenceRepository.getNextSequenceId("employee"));
+            return employeeRepository.addNewEmployee(employee);
+        }
     }
 }
