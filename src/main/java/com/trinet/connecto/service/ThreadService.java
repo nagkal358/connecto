@@ -12,6 +12,9 @@ public interface ThreadService {
     List<ThreadData> getAllThreadsForEmployee(Integer employeeId,Integer status, Integer pageNo, Integer pageLimit);
     List<ThreadData> getAllThreads(Integer status, Integer pageNo, Integer pageLimit);
     ThreadData getThreadById(Long threadId);
+
+    List<ThreadData> getExpiredThreads();
+
     Thread addNewThread(Thread thread);
     Thread editThread(Thread thread);
     Thread editThreadStatus(Long threadId, Integer status);

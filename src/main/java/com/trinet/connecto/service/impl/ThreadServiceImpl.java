@@ -75,6 +75,18 @@ public class ThreadServiceImpl implements ThreadService {
         return threadData;
     }
 
+    @Override
+    public List<ThreadData> getExpiredThreads() {
+        List<ThreadData> threadsData = new ArrayList<>();
+        List<Thread> threads = threadRepository.getAllExpiredThreads();
+        threads.forEach((thread) -> {
+            ThreadData threadData = modelMapper.map(thread, ThreadData.class);
+            threadData.setComments(commentRepository.getAllCommentsForThread(thread.id));
+            threadsData.add(threadData);
+        });
+        return threadsData;
+    }
+
     @SneakyThrows
     public Thread addNewThread(Thread thread){
         thread.setId(sequenceRepository.getNextSequenceId("thread"));

@@ -30,6 +30,10 @@ public class ThreadsController {
     public ResponseEntity<List<ThreadData>> getAllThreads(@PathVariable(required = false) Integer status, @PathVariable(required = false) Integer pageNo, @PathVariable(required = false) Integer pageLimit){
         return new ResponseEntity<>(threadService.getAllThreads(status, pageNo, pageLimit), HttpStatus.OK);
     }
+    @GetMapping(value = "/get-expired-threads")
+    public ResponseEntity<List<ThreadData>> getExpiredThreads(){
+        return new ResponseEntity<>(threadService.getExpiredThreads(), HttpStatus.OK);
+    }
     @GetMapping(value = "/get-threads-for-user/{employeeId}/{status}/{pageNo}/{pageLimit}")
     public ResponseEntity<List<ThreadData>> getAllThreadsForEmployee(@PathVariable Integer employeeId,@PathVariable(required = false) Integer status, @PathVariable(required = false) Integer pageNo, @PathVariable(required = false) Integer pageLimit){
         return new ResponseEntity<>(threadService.getAllThreadsForEmployee(employeeId, status, pageNo, pageLimit), HttpStatus.OK);
