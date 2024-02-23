@@ -1,9 +1,7 @@
 package com.trinet.connecto.repository.impl;
 
-import com.trinet.connecto.model.Category;
-import com.trinet.connecto.model.StatusCounts;
+import com.trinet.connecto.model.*;
 import com.trinet.connecto.model.Thread;
-import com.trinet.connecto.model.Vote;
 import com.trinet.connecto.repository.ThreadRepository;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,8 +79,6 @@ public class ThreadRepositoryImpl implements ThreadRepository {
         ProjectionOperation project = project("count").and("status").previousOperation();
         Aggregation aggregation = newAggregation(groupBy, project);
         AggregationResults<StatusCounts> result = mongoTemplate.aggregate(aggregation, Thread.class, StatusCounts.class);
-        Query query = new Query();
-        query.addCriteria(Criteria.where("status").is(1));
         return result.getMappedResults();
     }
 
@@ -104,6 +100,13 @@ public class ThreadRepositoryImpl implements ThreadRepository {
     @Override
     public Category addNewCategory(Category category) {
         return mongoTemplate.save(category);
+    }
+
+    @Override
+    public Category getCategory(String categoryName) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("category").is(categoryName));
+        return mongoTemplate.findOne(query, Category.class);
     }
 
     @Override
@@ -134,5 +137,14 @@ public class ThreadRepositoryImpl implements ThreadRepository {
         Update update = new Update();
         update.inc("noOfComments", 1);
         mongoTemplate.findAndModify(query, update, Thread.class);
+    }
+
+    @Override
+    public List<CategoryCounts> getCategorywiseCounts() {
+        GroupOperation groupBy = group("category.category").count().as("count");
+        ProjectionOperation project = project("count").and("category").previousOperation();
+        Aggregation aggregation = newAggregation(groupBy, project);
+        AggregationResults<CategoryCounts> result = mongoTemplate.aggregate(aggregation, Thread.class, CategoryCounts.class);
+        return result.getMappedResults();
     }
 }
