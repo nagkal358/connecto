@@ -4,9 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.sql.Date;
 import java.util.List;
@@ -25,4 +22,7 @@ public class ThreadData {
     public Integer status;
     public Integer employeeId;
     public List<Comment> comments;
+    public Integer noOfComments = 0;
+    public Integer noOfLikes = 0;
+    public Integer noOfVotes = 0;
 }

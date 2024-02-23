@@ -1,6 +1,7 @@
 package com.trinet.connecto.controller;
 
 import com.trinet.connecto.model.Comment;
+import com.trinet.connecto.model.Like;
 import com.trinet.connecto.service.CommentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,5 +31,10 @@ public class CommentsController {
     @PostMapping(value = "/add-comment")
     public ResponseEntity<Comment> addNewComment(@RequestBody Comment comment){
         return new ResponseEntity<>(commentService.addNewComment(comment), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/like-or-dislike-comment")
+    public ResponseEntity<Like> likeOrDisLikeComment(@RequestBody Like like){
+        return new ResponseEntity<>(commentService.likeOrDisLikeComment(like), HttpStatus.OK);
     }
 }

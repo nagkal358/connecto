@@ -23,4 +23,5 @@ public class Comment {
     public Integer threadId;
     public Integer employeeId;
     public Integer status = 1;
+    public Integer noOfLikes = 0;
 }

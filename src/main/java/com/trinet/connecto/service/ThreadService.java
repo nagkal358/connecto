@@ -1,9 +1,7 @@
 package com.trinet.connecto.service;
 
-import com.trinet.connecto.model.Category;
-import com.trinet.connecto.model.StatusCounts;
+import com.trinet.connecto.model.*;
 import com.trinet.connecto.model.Thread;
-import com.trinet.connecto.model.ThreadData;
 
 import java.util.List;
 
@@ -16,6 +14,8 @@ public interface ThreadService {
     ThreadData getThreadById(Long threadId);
     Thread addNewThread(Thread thread);
     Thread editThread(Thread thread);
+    Thread editThreadStatus(Long threadId, Integer status);
+    Vote voteForThread(Vote vote);
     Category addNewCategory(Category category);
     List<Category> getAllCategories();
 }

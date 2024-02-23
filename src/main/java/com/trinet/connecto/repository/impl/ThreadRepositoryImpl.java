@@ -3,6 +3,7 @@ package com.trinet.connecto.repository.impl;
 import com.trinet.connecto.model.Category;
 import com.trinet.connecto.model.StatusCounts;
 import com.trinet.connecto.model.Thread;
+import com.trinet.connecto.model.Vote;
 import com.trinet.connecto.repository.ThreadRepository;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ import org.springframework.stereotype.Repository;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 @Repository
 public class ThreadRepositoryImpl implements ThreadRepository {
@@ -46,6 +49,14 @@ public class ThreadRepositoryImpl implements ThreadRepository {
             query.addCriteria(Criteria.where("status").is(status));
         return mongoTemplate.find(query, Thread.class);
     }
+
+    @Override
+    public List<Thread> getAllExpiredThreads() {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("expiryOn").lt(Date.from(Instant.now())));
+        return mongoTemplate.find(query, Thread.class);
+    }
+
     @Override
     public List<Category> getAllCategories() {
         return mongoTemplate.findAll(Category.class);
@@ -93,5 +104,35 @@ public class ThreadRepositoryImpl implements ThreadRepository {
     @Override
     public Category addNewCategory(Category category) {
         return mongoTemplate.save(category);
+    }
+
+    @Override
+    public void addVoteForThread(Vote vote) {
+        mongoTemplate.save(vote);
+    }
+
+    @Override
+    public void increaseLikeCountsForThread(Integer threadId) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("id").is(threadId));
+        Update update = new Update();
+        update.inc("noOfLikes", 1);
+        mongoTemplate.findAndModify(query, update, Thread.class);
+    }
+    @Override
+    public void increaseVoteCountsForThread(Integer threadId) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("id").is(threadId));
+        Update update = new Update();
+        update.inc("noOfVotes", 1);
+        mongoTemplate.findAndModify(query, update, Thread.class);
+    }
+    @Override
+    public void increaseCommentCountsForThread(Integer threadId) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("id").is(threadId));
+        Update update = new Update();
+        update.inc("noOfComments", 1);
+        mongoTemplate.findAndModify(query, update, Thread.class);
     }
 }

@@ -1,9 +1,7 @@
 package com.trinet.connecto.service.impl;
 
-import com.trinet.connecto.model.Category;
-import com.trinet.connecto.model.StatusCounts;
+import com.trinet.connecto.model.*;
 import com.trinet.connecto.model.Thread;
-import com.trinet.connecto.model.ThreadData;
 import com.trinet.connecto.repository.CommentRepository;
 import com.trinet.connecto.repository.SequenceRepository;
 import com.trinet.connecto.repository.ThreadRepository;
@@ -15,9 +13,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -84,6 +83,32 @@ public class ThreadServiceImpl implements ThreadService {
     @SneakyThrows
     public Thread editThread(Thread thread){
         return threadRepository.editThread(thread);
+    }
+
+    @Override
+    public Thread editThreadStatus(Long threadId, Integer status) {
+        Optional<Thread> thread = Optional.ofNullable(threadRepository.getThreadById(threadId));
+        Thread thread1 = null;
+        if(thread.isPresent()){
+            thread1 = thread.get();
+            thread1.setStatus(status);
+            thread1.setStatusChangedOn(Date.from(Instant.now()));
+            if(status == 2){
+                LocalDateTime next7thDay = LocalDateTime.now().plusDays(7);
+                thread1.setExpiryOn(Date.from(next7thDay.toInstant(ZoneOffset.UTC)));
+            }
+            threadRepository.editThread(thread1);
+        }
+        return thread1;
+    }
+
+    @SneakyThrows
+    @Override
+    public Vote voteForThread(Vote vote) {
+        vote.setId(sequenceRepository.getNextSequenceId("vote"));
+        threadRepository.addVoteForThread(vote);
+        threadRepository.increaseVoteCountsForThread(vote.getThreadId());
+        return vote;
     }
 
     @SneakyThrows

@@ -1,9 +1,7 @@
 package com.trinet.connecto.controller;
 
-import com.trinet.connecto.model.Category;
-import com.trinet.connecto.model.StatusCounts;
+import com.trinet.connecto.model.*;
 import com.trinet.connecto.model.Thread;
-import com.trinet.connecto.model.ThreadData;
 import com.trinet.connecto.service.ThreadService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +47,14 @@ public class ThreadsController {
         thread.setId(threadId);
         return new ResponseEntity<>(threadService.editThread(thread), HttpStatus.OK);
     }
+    @PostMapping(value = "/reject-thread/{threadId}")
+    public ResponseEntity<Thread> editThread(@PathVariable Long threadId){
+        return new ResponseEntity<>(threadService.editThreadStatus(threadId, 4), HttpStatus.OK);
+    }
+    @PostMapping(value = "/approve-thread/{threadId}")
+    public ResponseEntity<Thread> approveThread(@PathVariable Long threadId){
+        return new ResponseEntity<>(threadService.editThreadStatus(threadId, 2), HttpStatus.OK);
+    }
     @GetMapping(value = "/get-categories")
     public ResponseEntity<List<Category>> getAllCategories(){
         return new ResponseEntity<>(threadService.getAllCategories(), HttpStatus.OK);
@@ -56,5 +62,9 @@ public class ThreadsController {
     @PostMapping(value = "/add-category")
     public ResponseEntity<Category> addNewCategory(@RequestBody Category category){
         return new ResponseEntity<>(threadService.addNewCategory(category), HttpStatus.OK);
+    }
+    @PostMapping(value = "/vote-for-thread")
+    public ResponseEntity<Vote> voteForThread(@RequestBody Vote vote){
+        return new ResponseEntity<>(threadService.voteForThread(vote), HttpStatus.OK);
     }
 }
