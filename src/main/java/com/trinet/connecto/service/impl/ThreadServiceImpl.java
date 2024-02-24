@@ -71,9 +71,7 @@ public class ThreadServiceImpl implements ThreadService {
 
     @Override
     public List<CategoryCounts> getCategorywiseCounts() {
-        //        Map<Integer, String> threadStatus = threadStatusMapper.getMapping();
-//        countsByStatus.forEach(cs -> cs.setStatusText(threadStatus.get(cs.getStatus())));
-        return threadRepository.getCategorywiseCounts();
+        return  threadRepository.getCategorywiseCounts();
     }
 
     public ThreadData getThreadById(Long threadId){
