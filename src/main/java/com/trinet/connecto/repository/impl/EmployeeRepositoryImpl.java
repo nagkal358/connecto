@@ -50,7 +50,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         Query query = new Query();
         query.addCriteria(Criteria.where("id").is(employee.getId()));
         Update update = new Update();
-        update.addToSet("lastLogin", Date.from(Instant.now()));
+        update.set("lastLogin", Date.from(Instant.now()));
         return mongoTemplate.findAndModify(query, update, Employee.class);
     }
 
