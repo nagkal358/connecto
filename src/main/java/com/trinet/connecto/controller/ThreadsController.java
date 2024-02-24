@@ -64,6 +64,10 @@ public class ThreadsController {
     public ResponseEntity<Thread> editThread(@PathVariable Long threadId){
         return new ResponseEntity<>(threadService.editThreadStatus(threadId, 4), HttpStatus.OK);
     }
+    @PostMapping(value = "/delete-thread/{threadId}")
+    public ResponseEntity<Thread> deleteThread(@PathVariable Long threadId){
+        return new ResponseEntity<>(threadService.editThreadStatus(threadId, 5), HttpStatus.OK);
+    }
     @PostMapping(value = "/approve-thread/{threadId}")
     public ResponseEntity<Thread> approveThread(@PathVariable Long threadId){
         return new ResponseEntity<>(threadService.editThreadStatus(threadId, 2), HttpStatus.OK);
