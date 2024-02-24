@@ -76,7 +76,7 @@ public class ThreadServiceImpl implements ThreadService {
 
     @Override
     public List<ThreadVotes> getVotesForThreads() {
-        threadRepository.getVotesForThreads();
+        return threadRepository.getVotesForThreads();
     }
 
     public ThreadData getThreadById(Long threadId){

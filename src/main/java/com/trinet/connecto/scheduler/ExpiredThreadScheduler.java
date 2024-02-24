@@ -1,7 +1,9 @@
 package com.trinet.connecto.scheduler;
 
+import com.trinet.connecto.exception.DuplicateVoteException;
 import com.trinet.connecto.model.Comment;
 import com.trinet.connecto.model.Thread;
+import com.trinet.connecto.model.Vote;
 import com.trinet.connecto.repository.impl.CommentRepositoryImpl;
 import com.trinet.connecto.repository.impl.ThreadRepositoryImpl;
 import jakarta.mail.Message;
@@ -15,9 +17,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @Configuration
 @EnableScheduling
@@ -33,7 +33,7 @@ public class ExpiredThreadScheduler {
     @Autowired
     private CommentRepositoryImpl commentRepository;
 
-
+    private static final int maxEmployeeId = 100;
     @Scheduled(cron = "0 0 22 * * SUN")
     public void getExpiredThreadContent() throws MessagingException {
         List<Thread> list = threadRepository.getAllExpiredThreads();
@@ -94,8 +94,29 @@ public class ExpiredThreadScheduler {
     public void increaseVoteCountForOpenThreads() {
         List<Thread> openThreads = threadRepository.getOpenThreads();
         for (Thread thread : openThreads) {
-            threadRepository.increaseVoteCountsForThread(Math.toIntExact(thread.getId()));
-            log.info("Vote count increased for thread {}", thread.getId());
+            Set<Integer> votedEmpIds = new HashSet<>();
+            int numVotes = new Random().nextInt(5) + 1;
+
+            for (int i = 0; i < numVotes; i++) {
+                int randomEmpId;
+                do {
+                    randomEmpId = new Random().nextInt(maxEmployeeId) + 1;
+                } while (votedEmpIds.contains(randomEmpId));
+                votedEmpIds.add(randomEmpId);
+                int agree = new Random().nextInt(2);
+
+                Vote vote = new Vote();
+                vote.setThreadId(Math.toIntExact(thread.getId()));
+                vote.setEmployeeId(randomEmpId);
+                vote.setAgree(agree);
+
+                try {
+                    threadRepository.addVoteForThread(vote);
+                    threadRepository.increaseVoteCountsForThread(vote);
+                } catch (DuplicateVoteException e) {
+                    log.warn("Duplicate vote attempt for thread {} with employee ID {}", thread.getId(), randomEmpId);
+                }
+            }
         }
     }
 }
