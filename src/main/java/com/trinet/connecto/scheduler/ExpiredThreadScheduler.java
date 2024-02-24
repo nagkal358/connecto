@@ -92,7 +92,7 @@ public class ExpiredThreadScheduler {
     }
     @Scheduled(fixedRate = 120000)
     public void increaseVoteCountForOpenThreads() {
-        List<Thread> openThreads = threadRepository.getOpenThreads();
+        List<Thread> openThreads = threadRepository.getAllExpiredThreads();
         for (Thread thread : openThreads) {
             Set<Integer> votedEmpIds = new HashSet<>();
             int numVotes = new Random().nextInt(5) + 1;
