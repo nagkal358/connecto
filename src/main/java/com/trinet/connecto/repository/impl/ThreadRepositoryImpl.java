@@ -141,8 +141,8 @@ public class ThreadRepositoryImpl implements ThreadRepository {
 
     @Override
     public List<CategoryCounts> getCategorywiseCounts() {
-        GroupOperation groupBy = group("category.category").count().as("count");
-        ProjectionOperation project = project("count").and("category").previousOperation();
+        GroupOperation groupBy = group("category.category").count().as("value");
+        ProjectionOperation project = project("value").and("name").previousOperation();
         Aggregation aggregation = newAggregation(groupBy, project);
         AggregationResults<CategoryCounts> result = mongoTemplate.aggregate(aggregation, Thread.class, CategoryCounts.class);
         return result.getMappedResults();
