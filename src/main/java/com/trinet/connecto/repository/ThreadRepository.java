@@ -1,9 +1,7 @@
 package com.trinet.connecto.repository;
 
-import com.trinet.connecto.model.Category;
-import com.trinet.connecto.model.StatusCounts;
+import com.trinet.connecto.model.*;
 import com.trinet.connecto.model.Thread;
-import com.trinet.connecto.model.Vote;
 
 import java.util.List;
 
@@ -20,6 +18,7 @@ public interface ThreadRepository {
     Thread addNewThread(Thread thread);
     Thread editThread(Thread thread);
     Category addNewCategory(Category category);
+    Category getCategory(String categoryName);
 
     void addVoteForThread(Vote vote);
 
@@ -27,4 +26,6 @@ public interface ThreadRepository {
 
     void increaseVoteCountsForThread(Integer threadId);
     void increaseCommentCountsForThread(Integer threadId);
+
+    List<CategoryCounts> getCategorywiseCounts();
 }

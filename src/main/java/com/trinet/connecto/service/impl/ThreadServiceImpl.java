@@ -6,6 +6,7 @@ import com.trinet.connecto.repository.CommentRepository;
 import com.trinet.connecto.repository.SequenceRepository;
 import com.trinet.connecto.repository.ThreadRepository;
 import com.trinet.connecto.service.ThreadService;
+import com.trinet.connecto.utils.RecordExists;
 import com.trinet.connecto.utils.ThreadStatusMapper;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -68,6 +69,13 @@ public class ThreadServiceImpl implements ThreadService {
         return threadRepository.getAllCategories();
     }
 
+    @Override
+    public List<CategoryCounts> getCategorywiseCounts() {
+        //        Map<Integer, String> threadStatus = threadStatusMapper.getMapping();
+//        countsByStatus.forEach(cs -> cs.setStatusText(threadStatus.get(cs.getStatus())));
+        return threadRepository.getCategorywiseCounts();
+    }
+
     public ThreadData getThreadById(Long threadId){
         Thread thread = threadRepository.getThreadById(threadId);
         ThreadData threadData = modelMapper.map(thread, ThreadData.class);
@@ -125,7 +133,12 @@ public class ThreadServiceImpl implements ThreadService {
 
     @SneakyThrows
     public Category addNewCategory(Category category){
-        category.setId(sequenceRepository.getNextSequenceId("category"));
-        return threadRepository.addNewCategory(category);
+        Optional<Category> category1 = Optional.ofNullable(threadRepository.getCategory(category.getCategory()));
+        if(category1.isEmpty()){
+            category.setId(sequenceRepository.getNextSequenceId("category"));
+            return threadRepository.addNewCategory(category);
+        } else{
+            return null;
+        }
     }
 }
