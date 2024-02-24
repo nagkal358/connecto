@@ -40,7 +40,7 @@ public class ThreadsController {
         return new ResponseEntity<>(threadService.getExpiredThreads(), HttpStatus.OK);
     }
     @GetMapping(value = "/get-thread-count-by-category")
-    public ResponseEntity<List<CategoryCounts>> getCategorywiseCounts(){
+    public ResponseEntity<List<CategoryCounts>> getCategoryWiseCounts(){
         return new ResponseEntity<>(threadService.getCategoryWiseCounts(), HttpStatus.OK);
     }
     @GetMapping(value = "/get-threads-for-user/{employeeId}/{status}/{pageNo}/{pageLimit}")
