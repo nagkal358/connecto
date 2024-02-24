@@ -3,6 +3,7 @@ package com.trinet.connecto.service.impl;
 import com.trinet.connecto.model.*;
 import com.trinet.connecto.model.Thread;
 import com.trinet.connecto.repository.CommentRepository;
+import com.trinet.connecto.repository.EmployeeRepository;
 import com.trinet.connecto.repository.SequenceRepository;
 import com.trinet.connecto.repository.ThreadRepository;
 import com.trinet.connecto.service.ThreadService;
@@ -28,6 +29,8 @@ public class ThreadServiceImpl implements ThreadService {
     SequenceRepository sequenceRepository;
     @Autowired
     CommentRepository commentRepository;
+    @Autowired
+    EmployeeRepository employeeRepository;
     @Autowired
     ModelMapper modelMapper;
     @Autowired
@@ -77,6 +80,54 @@ public class ThreadServiceImpl implements ThreadService {
     @Override
     public List<ThreadVotes> getVotesForThreads() {
         return threadRepository.getVotesForThreads();
+    }
+
+    private Map<String, Object> getDashboardVotesPercentage(List<ThreadVotes> votes){
+        Map<String, Object> d = new HashMap<>();
+        d.put("agreed", 0.0);
+        d.put("disagreed", 0.0);
+        int totalVotes = votes.stream().mapToInt(ThreadVotes::getNoOfVotes).sum();
+        int agreedVotes = votes.stream().mapToInt(v -> v.getVotes().getAgreed()).sum();
+        int disAgreedVotes = votes.stream().mapToInt(v -> v.getVotes().getNotAgreed()).sum();
+        if(totalVotes > 0) {
+            d.put("agreed", ((double) agreedVotes /totalVotes)*100);
+            d.put("disagreed", ((double) disAgreedVotes /totalVotes)*100);
+        }
+        return d;
+    }
+    private DashBoard getEmployeeDataForDashboard(){
+        List<ThreadVotes> votes = threadRepository.getVotesForThreadsForPeriod("month");
+        DashBoard employee = new DashBoard();
+        employee.setType("employee");
+        Map<String, Object> d = getDashboardVotesPercentage(votes);
+        employee.setData(d);
+        return employee;
+    }
+    @Override
+    public List<DashBoard> getDashboardCounts() {
+        List<DashBoard> dashBoardData = new ArrayList<>();
+        dashBoardData.add(getEmployeeDataForDashboard());
+        dashBoardData.add(getThreadDataForDashboard());
+        dashBoardData.add(getCategoryDataForDashboard());
+        return dashBoardData;
+    }
+
+    private DashBoard getCategoryDataForDashboard() {
+        DashBoard category = new DashBoard();
+        category.setType("category");
+        Map<String, Object> d =new HashMap<>();
+        category.setData(d);
+        return category;
+    }
+
+    private DashBoard getThreadDataForDashboard() {
+        DashBoard threads = new DashBoard();
+        threads.setType("threads");
+        Map<String, Object> d = new HashMap<>();
+        d.put("month", threadRepository.getThreadsForPeriod("month").size());
+        d.put("year", threadRepository.getThreadsForPeriod("year").size());
+        threads.setData(d);
+        return threads;
     }
 
     public ThreadData getThreadById(Long threadId){

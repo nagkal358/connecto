@@ -25,4 +25,6 @@ public interface ThreadService {
     List<CategoryCounts> getCategoryWiseCounts();
 
     List<ThreadVotes> getVotesForThreads();
+
+    List<DashBoard> getDashboardCounts();
 }

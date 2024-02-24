@@ -20,6 +20,7 @@ import org.springframework.stereotype.Repository;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -181,4 +182,24 @@ public class ThreadRepositoryImpl implements ThreadRepository {
         List<Thread> threads = mongoTemplate.find(query, Thread.class);
         return threads.stream().map(thread -> modelMapper.map(thread, ThreadVotes.class)).toList();
     }
+
+    @Override
+    public List<ThreadVotes> getVotesForThreadsForPeriod(String period) {
+        List<Thread> threads = getThreadsForPeriod(period);
+        return threads.stream().map(thread -> modelMapper.map(thread, ThreadVotes.class)).toList();
+    }
+
+    @Override
+    public List<Thread> getThreadsForPeriod(String period) {
+        LocalDate i = LocalDate.now();
+        int curYear = i.getYear();
+        int curMonth = i.getMonthValue();
+        if(period.equals("year")){
+            curMonth = 1;
+        }
+        Query query = new Query();
+        query.addCriteria(Criteria.where("createdOn").gt(LocalDate.of(curYear, curMonth, 1)));
+        return mongoTemplate.find(query, Thread.class);
+    }
+
 }

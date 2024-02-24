@@ -90,4 +90,8 @@ public class ThreadsController {
     public ResponseEntity<List<ThreadVotes>> getVotesForThreads(){
         return new ResponseEntity<>(threadService.getVotesForThreads(), HttpStatus.OK);
     }
+    @GetMapping(value = "/get-dashborad-counts")
+    public ResponseEntity<List<DashBoard>> getDashboardCounts(){
+        return new ResponseEntity<>(threadService.getDashboardCounts(), HttpStatus.OK);
+    }
 }

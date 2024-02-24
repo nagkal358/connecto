@@ -32,4 +32,7 @@ public interface ThreadRepository {
     List<CategoryCounts> getCategoryWiseCounts();
 
     List<ThreadVotes> getVotesForThreads();
+    List<ThreadVotes> getVotesForThreadsForPeriod(String period);
+
+    List<Thread> getThreadsForPeriod(String period);
 }
