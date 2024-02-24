@@ -2,8 +2,8 @@ package com.trinet.connecto.scheduler;
 
 import com.trinet.connecto.model.Comment;
 import com.trinet.connecto.model.Thread;
-import com.trinet.connecto.repository.impl.CommentRepositoryImpl;
-import com.trinet.connecto.repository.impl.ThreadRepositoryImpl;
+import com.trinet.connecto.repository.CommentRepository;
+import com.trinet.connecto.repository.ThreadRepository;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
@@ -18,7 +18,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Configuration
 @EnableScheduling
@@ -26,13 +25,13 @@ import java.util.stream.Collectors;
 public class ExpiredThreadScheduler {
 
     @Autowired
-    private ThreadRepositoryImpl threadRepository;
+    private ThreadRepository threadRepository;
 
     @Autowired
     private JavaMailSender mailSender;
 
     @Autowired
-    private CommentRepositoryImpl commentRepository;
+    private CommentRepository commentRepository;
 
 
     @Scheduled(cron = "0 0 22 * * SUN")
@@ -41,7 +40,7 @@ public class ExpiredThreadScheduler {
         List<Thread> top10Threads = list.stream()
                 .sorted(Comparator.comparingInt(Thread::getNoOfLikes).reversed())
                 .limit(10)
-                .collect(Collectors.toList());
+                .toList();
         List<String> formattedContent = new ArrayList<>();
         for (Thread thread : top10Threads) {
             formattedContent.add(formatEmailContent(thread));
@@ -51,9 +50,7 @@ public class ExpiredThreadScheduler {
 
     private String formatEmailContent(Thread thread) {
         List<Comment> threadComments = commentRepository.getAllCommentsForThread(thread.getId());
-        Comment topComment = threadComments.stream()
-                .sorted(Comparator.comparingInt(Comment::getNoOfLikes).reversed())
-                .findFirst()
+        Comment topComment = threadComments.stream().max(Comparator.comparingInt(Comment::getNoOfLikes))
                 .orElse(null);
 
         String content = "<b>Dear employees,</b>\n\n"
