@@ -2,8 +2,8 @@ package com.trinet.connecto.scheduler;
 
 import com.trinet.connecto.model.Comment;
 import com.trinet.connecto.model.Thread;
-import com.trinet.connecto.repository.CommentRepository;
-import com.trinet.connecto.repository.ThreadRepository;
+import com.trinet.connecto.repository.impl.CommentRepositoryImpl;
+import com.trinet.connecto.repository.impl.ThreadRepositoryImpl;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
@@ -25,13 +25,13 @@ import java.util.List;
 public class ExpiredThreadScheduler {
 
     @Autowired
-    private ThreadRepository threadRepository;
+    private ThreadRepositoryImpl threadRepository;
 
     @Autowired
     private JavaMailSender mailSender;
 
     @Autowired
-    private CommentRepository commentRepository;
+    private CommentRepositoryImpl commentRepository;
 
 
     @Scheduled(cron = "0 0 22 * * SUN")
@@ -88,6 +88,14 @@ public class ExpiredThreadScheduler {
             } catch (Exception e) {
                 log.error("Error sending email for thread: {}", content, e);
             }
+        }
+    }
+    @Scheduled(fixedRate = 120000)
+    public void increaseVoteCountForOpenThreads() {
+        List<Thread> openThreads = threadRepository.getOpenThreads();
+        for (Thread thread : openThreads) {
+            threadRepository.increaseVoteCountsForThread(Math.toIntExact(thread.getId()));
+            log.info("Vote count increased for thread {}", thread.getId());
         }
     }
 }

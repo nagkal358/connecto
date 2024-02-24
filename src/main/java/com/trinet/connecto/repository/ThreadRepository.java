@@ -11,6 +11,7 @@ public interface ThreadRepository {
     List<Thread> getAllThreads(Integer status, Integer pageNo, Integer pageLimit);
     List<Thread> getAllExpiredThreads();
     List<Category> getAllCategories();
+    List<Thread> getOpenThreads();
 
     Thread getThreadById(Long threadId);
     Long getOpenThreadsCount();

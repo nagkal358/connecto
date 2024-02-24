@@ -72,6 +72,12 @@ public class ThreadRepositoryImpl implements ThreadRepository {
         query.addCriteria(Criteria.where("status").is(1));
         return mongoTemplate.count(query, Thread.class);
     }
+    @Override
+    public List<Thread> getOpenThreads() {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("status").is(1));
+        return mongoTemplate.find(query, Thread.class);
+    }
 
     @Override
     public List<StatusCounts> getThreadsCountsByStatus() {
