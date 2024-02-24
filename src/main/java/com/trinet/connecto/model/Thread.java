@@ -29,4 +29,5 @@ public class Thread {
     public Integer noOfComments = 0;
     public Integer noOfLikes = 0;
     public Integer noOfVotes = 0;
+    public VoteCounts votes = new VoteCounts(0, 0);
 }

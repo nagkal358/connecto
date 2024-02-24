@@ -41,7 +41,7 @@ public class ThreadsController {
     }
     @GetMapping(value = "/get-thread-count-by-category")
     public ResponseEntity<List<CategoryCounts>> getCategorywiseCounts(){
-        return new ResponseEntity<>(threadService.getCategorywiseCounts(), HttpStatus.OK);
+        return new ResponseEntity<>(threadService.getCategoryWiseCounts(), HttpStatus.OK);
     }
     @GetMapping(value = "/get-threads-for-user/{employeeId}/{status}/{pageNo}/{pageLimit}")
     public ResponseEntity<List<ThreadData>> getAllThreadsForEmployee(@PathVariable Integer employeeId,@PathVariable(required = false) Integer status, @PathVariable(required = false) Integer pageNo, @PathVariable(required = false) Integer pageLimit){
@@ -80,5 +80,10 @@ public class ThreadsController {
     @PostMapping(value = "/vote-for-thread")
     public ResponseEntity<Vote> voteForThread(@RequestBody Vote vote){
         return new ResponseEntity<>(threadService.voteForThread(vote), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/get-votes-for-threads")
+    public ResponseEntity<List<ThreadVotes>> getVotesForThreads(){
+        return new ResponseEntity<>(threadService.getVotesForThreads(), HttpStatus.OK);
     }
 }

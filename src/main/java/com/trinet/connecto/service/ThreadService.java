@@ -22,5 +22,7 @@ public interface ThreadService {
     Category addNewCategory(Category category);
     List<Category> getAllCategories();
 
-    List<CategoryCounts> getCategorywiseCounts();
+    List<CategoryCounts> getCategoryWiseCounts();
+
+    List<ThreadVotes> getVotesForThreads();
 }

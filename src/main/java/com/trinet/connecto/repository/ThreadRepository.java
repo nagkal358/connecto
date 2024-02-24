@@ -22,11 +22,14 @@ public interface ThreadRepository {
     Category getCategory(String categoryName);
 
     void addVoteForThread(Vote vote);
+    boolean isDuplicateVote(Vote vote);
 
     void increaseLikeCountsForThread(Integer threadId);
 
-    void increaseVoteCountsForThread(Integer threadId);
+    void increaseVoteCountsForThread(Vote vote);
     void increaseCommentCountsForThread(Integer threadId);
 
-    List<CategoryCounts> getCategorywiseCounts();
+    List<CategoryCounts> getCategoryWiseCounts();
+
+    List<ThreadVotes> getVotesForThreads();
 }

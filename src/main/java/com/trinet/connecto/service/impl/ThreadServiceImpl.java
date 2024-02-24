@@ -70,8 +70,13 @@ public class ThreadServiceImpl implements ThreadService {
     }
 
     @Override
-    public List<CategoryCounts> getCategorywiseCounts() {
-        return  threadRepository.getCategorywiseCounts();
+    public List<CategoryCounts> getCategoryWiseCounts() {
+        return  threadRepository.getCategoryWiseCounts();
+    }
+
+    @Override
+    public List<ThreadVotes> getVotesForThreads() {
+        threadRepository.getVotesForThreads();
     }
 
     public ThreadData getThreadById(Long threadId){
@@ -123,9 +128,11 @@ public class ThreadServiceImpl implements ThreadService {
     @SneakyThrows
     @Override
     public Vote voteForThread(Vote vote) {
-        vote.setId(sequenceRepository.getNextSequenceId("vote"));
-        threadRepository.addVoteForThread(vote);
-        threadRepository.increaseVoteCountsForThread(vote.getThreadId());
+        if(!threadRepository.isDuplicateVote(vote)){
+            vote.setId(sequenceRepository.getNextSequenceId("vote"));
+            threadRepository.addVoteForThread(vote);
+            threadRepository.increaseVoteCountsForThread(vote);
+        }
         return vote;
     }
 

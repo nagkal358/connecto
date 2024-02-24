@@ -4,7 +4,9 @@ import com.trinet.connecto.model.*;
 import com.trinet.connecto.model.Thread;
 import com.trinet.connecto.repository.ThreadRepository;
 import org.bson.Document;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
@@ -20,11 +22,15 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+
 @Repository
 public class ThreadRepositoryImpl implements ThreadRepository {
 
     @Autowired
     private MongoTemplate mongoTemplate;
+    @Autowired
+    ModelMapper modelMapper;
 
     @Override
     public List<Thread> getAllThreadsForEmployee(Integer employeeId, Integer status, Integer pageNo, Integer pageLimit) {
@@ -121,6 +127,14 @@ public class ThreadRepositoryImpl implements ThreadRepository {
     }
 
     @Override
+    public boolean isDuplicateVote(Vote vote) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("threadId").is(vote.getThreadId()).and("employeeId").is(vote.getEmployeeId()));
+        Optional<Vote> vote1 = Optional.ofNullable(mongoTemplate.findOne(query, Vote.class));
+        return vote1.isPresent();
+    }
+
+    @Override
     public void increaseLikeCountsForThread(Integer threadId) {
         Query query = new Query();
         query.addCriteria(Criteria.where("id").is(threadId));
@@ -129,11 +143,16 @@ public class ThreadRepositoryImpl implements ThreadRepository {
         mongoTemplate.findAndModify(query, update, Thread.class);
     }
     @Override
-    public void increaseVoteCountsForThread(Integer threadId) {
+    public void increaseVoteCountsForThread(Vote vote) {
         Query query = new Query();
-        query.addCriteria(Criteria.where("id").is(threadId));
+        query.addCriteria(Criteria.where("id").is(vote.getThreadId()));
         Update update = new Update();
         update.inc("noOfVotes", 1);
+        if(vote.getAgree() == 1){
+            update.inc("votes.agreed", 1);
+        } else{
+            update.inc("votes.notAgreed", 1);
+        }
         mongoTemplate.findAndModify(query, update, Thread.class);
     }
     @Override
@@ -146,11 +165,20 @@ public class ThreadRepositoryImpl implements ThreadRepository {
     }
 
     @Override
-    public List<CategoryCounts> getCategorywiseCounts() {
+    public List<CategoryCounts> getCategoryWiseCounts() {
         GroupOperation groupBy = group("category.category").count().as("value");
         ProjectionOperation project = project("value").and("name").previousOperation();
         Aggregation aggregation = newAggregation(groupBy, project);
         AggregationResults<CategoryCounts> result = mongoTemplate.aggregate(aggregation, Thread.class, CategoryCounts.class);
         return result.getMappedResults();
+    }
+
+    @Override
+    public List<ThreadVotes> getVotesForThreads() {
+        Query query = new Query();
+        query.with(Sort.by(Sort.Direction.DESC, "noOfVotes"));
+        query.fields().include("title").include("votes").include("noOfVotes");
+        List<Thread> threads = mongoTemplate.find(query, Thread.class);
+        return threads.stream().map(thread -> modelMapper.map(thread, ThreadVotes.class)).toList();
     }
 }
