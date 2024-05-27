@@ -1,0 +1,10 @@
+scalar LocalDate
+type Employee{
+    id: ID!,
+    name: String,
+    email: String
+    password: String,
+    role: Int,
+    signupOn: LocalDate,
+    lastLogin: LocalDate
+}

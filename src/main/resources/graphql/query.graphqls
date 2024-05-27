@@ -1,0 +1,6 @@
+type Query {
+    getEmployees:[Employee],
+    getEmployeeById(id: ID):Employee,
+    getEmployeeByEmailAndPwd( email:String,  password:String):Employee,
+    getCategories:[Category]
+}
